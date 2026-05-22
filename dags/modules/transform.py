@@ -18,9 +18,7 @@ def _timestamp_utc(series):
 
 
 def transform_articles(df):
-    """
-    Transforms raw source articles into the DWH fact schema.
-    """
+    """Map source rows to the fact schema."""
     if df.empty:
         print("Transform: input DataFrame is empty. Skipping.")
         return df

@@ -31,11 +31,7 @@ def _windows(start_time, end_time, chunk_days):
 
 
 def run_initial_backfill():
-    """
-    Loads all historical article rows from 2016 onward exactly once per warehouse.
-    Data is processed in bounded windows and batches, then future hourly runs use
-    updated_at watermarking for incremental changes.
-    """
+    """Backfill historical articles and seed the incremental watermark."""
     client = init_bigquery_tables(bigquery.Client())
     existing_backfill = get_control_record(client, BACKFILL_PROCESS)
 

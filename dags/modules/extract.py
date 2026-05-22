@@ -24,9 +24,7 @@ def get_source_engine(conn_string=None):
 
 
 def extract_from_supabase(start_time, end_time, conn_string=None):
-    """
-    Incremental extract by updated_at in [start_time, end_time).
-    """
+    """Read rows updated in one watermark window."""
     engine = get_source_engine(conn_string)
     query = text(f"""
         SELECT {ARTICLE_COLUMNS}
@@ -49,10 +47,7 @@ def extract_from_supabase(start_time, end_time, conn_string=None):
 
 
 def iter_articles_created_between(start_time, end_time, batch_size=5000, conn_string=None):
-    """
-    Historical extract by created_at with keyset pagination.
-    Yields DataFrames so the backfill does not need to keep all historical rows in memory.
-    """
+    """Yield historical rows in keyset-paginated batches."""
     engine = get_source_engine(conn_string)
     last_created_at = start_time
     last_id = 0
@@ -94,9 +89,7 @@ def iter_articles_created_between(start_time, end_time, batch_size=5000, conn_st
 
 
 def iter_article_ids(batch_size=10000, conn_string=None):
-    """
-    Streams source article IDs for hard-delete reconciliation.
-    """
+    """Yield source article IDs in batches."""
     engine = get_source_engine(conn_string)
     last_id = 0
     query = text("""

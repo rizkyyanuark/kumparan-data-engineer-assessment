@@ -43,10 +43,7 @@ def historical_backfill_wrapper(**context):
 
 
 def incremental_etl_wrapper(**context):
-    """
-    Runs hourly incremental ETL using a persisted updated_at watermark.
-    This avoids missing data if the scheduler is down while keeping the DAG hourly.
-    """
+    """Load updated rows from the last processed watermark."""
     client = init_bigquery_tables(bigquery.Client())
     interval_start = _to_utc(context["data_interval_start"])
     interval_end = _to_utc(context["data_interval_end"])

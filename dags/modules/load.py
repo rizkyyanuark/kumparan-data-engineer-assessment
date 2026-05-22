@@ -81,10 +81,7 @@ def _ensure_table(client, table_name, schema, description=None, partition_field=
 
 
 def init_bigquery_tables(client=None):
-    """
-    Creates the BigQuery dataset, fact table, dimensions, and ETL control table.
-    This function is intentionally safe to call at the start of every DAG run.
-    """
+    """Ensure warehouse tables exist."""
     client = client or bigquery.Client()
     dataset_ref = _dataset_ref(client)
 
@@ -176,10 +173,7 @@ def seed_dim_dates(client=None, start_date="2015-01-01", end_date="2030-12-31"):
 
 
 def refresh_dim_authors(client=None):
-    """
-    Rebuilds the author dimension from the fact table after each data change.
-    The source assessment only provides author_id, so author_name is a stable placeholder.
-    """
+    """Refresh the derived author dimension."""
     client = client or bigquery.Client()
     fact_table_id = _table_id(client, FACT_TABLE)
     dim_table_id = _table_id(client, DIM_AUTHORS_TABLE)
@@ -204,9 +198,7 @@ def refresh_dim_authors(client=None):
 
 
 def load_to_bigquery(df, dataset_id=DATASET_ID, table_id=FACT_TABLE):
-    """
-    Loads transformed article rows through a staging table and idempotent MERGE.
-    """
+    """Merge transformed rows into the fact table."""
     if df.empty:
         print("Load: DataFrame is empty. Skipping fact table load.")
         return

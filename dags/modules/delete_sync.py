@@ -7,10 +7,7 @@ from modules.load import DATASET_ID, FACT_TABLE, init_bigquery_tables, refresh_d
 
 
 def sync_hard_deletes(conn_string=None):
-    """
-    Detects rows that disappeared from the source table and soft-deletes them in the DWH.
-    Source IDs are staged in BigQuery so the comparison is handled by the warehouse.
-    """
+    """Mark fact rows missing from the source ID snapshot as deleted."""
     client = init_bigquery_tables(bigquery.Client())
     project_id = client.project
     fact_table_id = f"{project_id}.{DATASET_ID}.{FACT_TABLE}"
