@@ -1,0 +1,25 @@
+# Credentials & Secrets
+gcp-key.json
+.env
+
+# Local assessment input
+Data Engineer Assessment V3.1.pdf
+
+# Apache Airflow runtime directories
+logs/
+plugins/
+dags/__pycache__/
+dags/*/__pycache__/
+db/
+
+# Python caching
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+venv/
+.venv/
+
+# Local tooling
+.antigravitycli/
